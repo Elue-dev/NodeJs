@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
+const colors = require('colors');
 const dotenv = require('dotenv');
 
 dotenv.config({ path: './config.env' }); //to get access to environment variables
 
 const app = require('./app');
+
+app.use('/api/v1/tours', require('./routes/tourRoutes'));
+app.use('/api/v1/users', require('./routes/userRoutes'));
 
 // console.log('express environment = ', app.get('env'));
 // console.log('node environment = ', process.env);
@@ -20,46 +24,10 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
+    useUnifiedTopology: true,
   })
-  .then();
-//con(connection) is the resolved value of the promise (goes into the parantheses)
-
-//create a schema
-const tourSchemas = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'A tour must have a name'],
-    unique: true,
-  },
-  rating: {
-    type: Number,
-    default: 4.5,
-  },
-  price: {
-    type: Number,
-    required: [true, 'A tour must have a price'],
-  },
-});
-
-//create a model out of the schema
-const Tour = mongoose.model('Tour', tourSchemas);
-
-//create new document out of the tour model
-const testTour = new Tour({
-  name: 'The Peoples Palace',
-  rating: 5.0,
-  price: 650,
-});
-
-//save document to the tour collection in the database (returns a promise)
-testTour
-  .save()
-  .then((doc) => {
-    console.log(doc);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+  .then(() => console.log('Database Connected Successfully!'.cyan.bold));
+//con(connection) is the resolved value of the promise (goes into the parantheses).
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

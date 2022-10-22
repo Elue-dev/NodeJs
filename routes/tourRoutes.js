@@ -9,14 +9,20 @@ const {
   getSingleTour,
   updateTour,
   deleteTour,
-  checkID,
-  checkBody,
+  aliasTopTours,
+  getTourStats,
+  getMonthlyPlan,
 } = tourController;
 
-//param middleware, defined in tour controller
-router.param('id', checkID);
+// ALIASING
+router.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 
-router.route('/').get(getAllTours).post(checkBody, createTour);
+// AGGREGATION PIPELINE
+router.route('/tour-stats').get(getTourStats);
+router.route('/monthly-plan/:year').get(getMonthlyPlan);
+
+// param middleware, defined in tour controller
+router.route('/').get(getAllTours).post(createTour);
 
 router.route('/:id').get(getSingleTour).patch(updateTour).delete(deleteTour);
 

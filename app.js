@@ -20,7 +20,6 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use((req, res, next) => {
   //next so that request - response cycle dosen't dosent get stuck in this midd. function
-  console.log('Hello from the middleware 👻');
   next();
 });
 
